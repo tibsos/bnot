@@ -1,0 +1,57 @@
+{% if pinned_notes %}
+
+    <div class="pinned-notes">
+
+        <span class="section-title">
+
+            Закрепленные заметки
+
+        </span>
+
+        {% for note in pinned_notes %}
+
+            <div class="note">
+
+                <div class="content">
+
+                    <span class="title">{{ note.title }}</span>
+                    <span class="content">{{ note.content | safe }}</span>
+
+                </div>
+                
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
+
+{% if notes %}
+
+    <div class="pinned-notes">
+
+        <span class="section-title">
+
+            Другие заметки
+
+        </span>
+
+        {% for note in notes %}
+
+            <div class="note">
+
+                <div class="content">
+
+                    <span class="title">{{ note.title }}</span>
+                    <span class="content">{{ note.content | safe }}</span>
+
+                </div>
+                
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}

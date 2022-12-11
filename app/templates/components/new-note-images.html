@@ -1,0 +1,16 @@
+{% for image in note.images.all %}
+
+    <div class="image">
+
+        <img src="{{ image.file.url }}">
+
+    </div>
+
+{% endfor %}
+
+<script>
+
+    $('#new-note-uid').val("{{ note.uid }}");
+    $('#new-note-uid-imgs').val("{{ note.uid }}");
+
+</script>

@@ -1,0 +1,47 @@
+{% for folder in folders %}
+
+    <div class="page">
+
+        <span>{{ folder.title }}</span>
+
+    </div>
+
+{% endfor %}
+
+<div class="folder-list">
+
+
+    {% for folder in folders %}
+
+        <span class="folder-item" id="{{ folder.uid }}">{{ folder.title }}</span>
+
+    {% empty %}
+    {% endfor %}
+
+
+</div>
+
+<script>
+
+    var uid;
+    var folder_list = [];
+
+    $('.folder-item').click(function() {
+
+        uid = $(this).attr('id');
+
+        if (folder_list.includes(uid)) {
+
+            folder_list.pop(uid);
+
+        } else {
+
+            folder_list.push(uid);
+
+        }
+        
+        $("#new-note-folders").val(folder_list.join(' '));
+
+    })
+
+</script>

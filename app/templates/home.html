@@ -1,0 +1,331 @@
+{% load static %}
+{% load compress %}
+
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+
+        <script src="{% static 'packages/jquery-3.6.1.min.js' %}"></script>
+        <script src="{% static 'packages/htmx.min.js' %}"></script>
+
+    </head>
+
+    <body>
+
+        <div class="sidebar">
+
+            <div class="folders">
+
+                {% include 'components/folders.html' %}
+
+            </div>
+
+            <div class="page" id="create-folder">
+
+                <span>+</span>
+
+                <span>Создать блокнот</span>
+
+            </div>
+
+        </div>
+        
+        <div class="new-note">
+
+            <form>
+
+                <div class="actions">
+
+                    <div id="pin">
+
+                        P
+
+                    </div>
+
+                    <div id="love">
+
+                        L
+
+                    </div>
+
+                </div>
+
+                <input type="text" name="folders" id="new-note-folders" hidden />
+
+                <input type="text" name="title" class="new-note-title" placeholder="Я помню чудное мгновение...">
+                
+                <div class="new-note-images">
+
+                    {% include 'components/new-note-images.html' %}
+
+                </div>
+
+                
+
+                <div class="rte">
+
+                    <button type="button" id="bold"><b>Ж</b></button>
+                    <button type="button" id="italic"><i>К</i></button>
+                    <button type="button" id="underline"><u>С</u></button>
+                    <button type="button" id="strike"><s>О</s></button>
+                    
+                    <button type="button" id="ul">UL</button>
+                    <button type="button" id="ol">OL</button>
+                    <button type="button" id="cl">CL</button>
+                    
+                    <button type="button" id="image">I</button>
+                    <button type="button" id="background">C</button>
+
+                    <button type="button" id="erase">E</button>
+
+                </div>
+                
+                <div class="content">
+
+                    <input type="text" name="content" id="new-note-content" hidden />
+                    <div contenteditable="true" class="new-note-content"></div>
+
+                </div>
+                
+                <input type="checkbox" name="pinned" id="pin-cb" hidden />
+                <input type="checkbox" name="loved" id="love-cb" hidden />
+
+                <div class="show-folders">
+
+                    F
+
+                </div>
+
+                <input type="text" name="note-uid" id="new-note-uid" hidden />
+
+                <button type="submit" class="create-new-note-btn" hx-post="{% url 'app:create-note' %}" hx-target=".notes">Создать</button>
+
+            </form>
+
+        </div>
+
+        <form hx-encoding="multipart/form-data"
+            hx-post="{% url 'app:add-image-to-new-note' %}"
+            hx-target=".new-note-images">
+
+            <input type="text" name="note-uid" id="new-note-uid-imgs" hidden />
+
+            <input type="file" name="image" id="new-note-image-file" hidden />
+
+            <button type="submit" id='upload-image-btn' hx-post="{% url 'app:add-image-to-new-note' %}" hx-target=".new-note-images" hidden></button>
+
+        </form>
+
+        <div class="notes">
+
+            {% include 'components/notes.html' %}
+
+        </div>
+
+        <div class="create-folder-wrapper">
+
+            <div class="content">
+
+                <form>
+
+                    <input type="text" name="title" class="title">
+
+                    <button class="create-folder-btn" hx-post="{% url 'app:create-folder' %}" hx-target=".folders">Создать блокнот</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </body>
+
+    <script>
+
+        $('.rte').click(function() {
+
+            $('#new-note-content').val($('.new-note-content').html());
+
+        })
+
+        $('.new-note-content').keyup(function() {
+
+            $('#new-note-content').val($('.new-note-content').html());
+
+        })
+
+        /* RTE */
+
+        $('#bold').click(function() {
+
+            document.execCommand('bold');
+            $(this).toggleClass('active');
+            $('.new-note-content').focus();
+
+        });
+
+        $('#italic').click(function() {
+
+            document.execCommand('italic');
+            $(this).toggleClass('active');
+            $('.new-note-content').focus();
+
+        });
+
+        $('#underline').click(function() {
+
+            document.execCommand('underline');
+            $(this).toggleClass('active');
+            $('.new-note-content').focus();
+
+        });
+
+        $('#strike').click(function() {
+
+            document.execCommand('strikeThrough');
+            $(this).toggleClass('active');
+            $('.new-note-content').focus();
+
+        });
+
+        $('#ul').click(function() {
+
+            document.execCommand('insertUnorderedList');
+            $(this).toggleClass('active');
+            $('.new-note-content').focus();
+
+        });
+
+        $('#ol').click(function() {
+
+            document.execCommand('insertOrderedList');
+            $(this).toggleClass('active');
+            $('.new-note-content').focus();
+
+        });
+
+        let checkListHTML = `
+
+            <ul>
+
+                <li class='checkbox-item'>
+
+                    <input type="checkbox">
+
+                </li>
+
+            </ul>
+
+        `
+
+        $('#cl').click(function() {           
+
+            range = window.getSelection().getRangeAt(0);
+            parentEl = range.commonAncestorContainer.parentNode;
+
+            if (parentEl.className !== 'checkbox-item' && parentEl.tagName === 'LI') {
+
+                document.execCommand('insertHTML', false, "<input type='checkbox' />");
+                $('.new-note-content').focus();
+
+            } else {
+
+                document.execCommand('insertHTML', false, checkListHTML);
+                $('.new-note-content').focus();
+
+            }
+
+        });
+
+        $(".new-note-content").on('keydown', function(e) {
+
+            range = window.getSelection().getRangeAt(0);
+            parentEl = range.commonAncestorContainer.parentNode;
+
+            if (parentEl.className === 'checkbox-item') {
+
+                if (e.keyCode === 13) {
+                    
+                    setTimeout(function () {
+
+                        document.execCommand('insertHTML', false, "<input type='checkbox' />");
+
+                    }, 1)
+
+                }
+
+            }
+
+        });
+
+        $('#image').click(function() {
+
+            $('#new-note-image-file').click();
+
+        });
+
+        $('#new-note-image-file').change(function() {
+
+            $('#upload-image-btn').click();
+
+        });
+
+        $('#erase').click(function() {
+
+            clearNewNote();
+
+        })
+
+        document.body.addEventListener('htmx:configRequest', (event) => {
+
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+
+        })
+
+        $('#pin').click(function() {
+
+            $('#pin-cb').prop('checked', !$('#pin-cb').prop('checked'));
+
+        })
+
+        $('#love').click(function() {
+
+            $('#love-cb').prop('checked', !$('#love-cb').prop('checked'));
+
+        })
+
+        $('#create-folder').click(function() {
+
+            $('.create-folder-wrapper').show();
+
+        })
+
+        $('.create-new-note-btn').click(function() {
+
+            setTimeout(function() {
+
+                clearNewNote();
+
+            }, 1)
+
+        });
+
+        function clearNewNote() {
+
+            $('#new-note-folders').val('');
+
+            $('.new-note-title').val('');
+            $('#new-note-content').val('');
+            $('.new-note-content').html('');
+
+            $('#pin-cb').prop('checked', false);
+            $('#love-cb').prop('checked', false);
+
+        }
+
+    </script>
+
+</html>
