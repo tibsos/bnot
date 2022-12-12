@@ -1,0 +1,436 @@
+$top-nav-height: 60px;
+
+
+button {
+
+    border: none;
+    cursor: pointer;
+
+}
+
+input {
+
+    border: none;
+
+    font-size: 17px;
+    color: grey;
+
+}
+
+input:focus {
+
+    outline: none;
+
+}
+
+body, html {
+
+    width: 100%;
+    height: 100vh;
+
+    margin: 0;
+
+}
+
+.top-nav {
+
+    position: relative;
+    top: 20px;
+    left: 1.5%;
+
+    width: 97%;
+    height: $top-nav-height;
+
+    border: 1px solid red;
+    border-radius: 100px;
+
+    .open-sidenav {
+
+        position: relative;
+        left: 10px;
+
+        width: 50px;
+        height: $top-nav-height;
+
+        display: flex;
+        align-items: center;
+
+        cursor: pointer;
+
+        float: left;
+
+        div {
+
+            width: 45px;
+            height: 45px;
+
+            border: 1px solid violet;
+            border-radius: 50px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+    }
+
+    .search {
+
+        position: relative;
+        left: 30px;
+
+        width: clamp(200px, 50%, 600px);
+        height: $top-nav-height;
+
+        display: flex;
+        align-items: center;
+
+        float: left;
+
+        form {
+
+            width: 100%;
+
+            input {
+
+                height: 40px;
+                width: 100%;
+                
+                padding: 0 15px 0 15px;
+                
+                border: 1px solid brown;
+                border-radius: 50px;
+    
+            }
+
+        }
+
+    }
+
+    .buttons {
+
+        position: absolute;
+        right: 10px;
+
+        height: $top-nav-height;
+
+        display: flex;
+        align-items: center;
+
+        div {
+
+            width: 45px;
+            height: 45px;
+
+            display: inline-block;
+
+            margin-left: 20px;
+
+            border: 1px solid yellow;
+            border-radius: 50px;
+
+        }
+        
+    }
+
+}
+
+.sidenav {
+
+    position: relative;
+    left: 1.5%;
+    top: 40px;
+
+    width: 50px;
+    
+    .page {
+
+        width: 45px;
+        height: 45px;
+
+        margin-bottom: 10px;
+
+        border-radius: 50px;    
+        border: 1px solid blue;
+
+        cursor: pointer;
+
+        transition: width 0.5s ease-in-out;
+
+        span {
+
+            display: none;
+
+        }
+
+    }
+
+    
+
+}
+
+.sidebar.open {
+
+    .page {
+
+
+        span {
+
+            display: block;
+
+        }
+
+    }
+    
+}
+
+.new-note-wrapper {
+
+    position: relative;
+    left: 0;
+    bottom: 280px;
+
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+}
+
+.new-note {
+
+    height: 50px;
+    width: 600px;
+
+    border: 1px solid orange;
+    border-radius: 100px;
+
+    transition: margin 0.5s ease-in-out;
+
+    .title-wrapper {
+
+        position: relative;
+        
+        height: 50px;
+        width: 80%;
+
+        display: flex;
+        align-items: center;
+
+        float: left;
+
+        .new-note-title {
+
+            position: relative;
+            left: 5px;
+            
+            height: 38px;
+            width: 100%;
+    
+            padding: 0 15px 0 15px;
+    
+            border: 1px solid green;
+            border-radius: 50px;
+    
+        }
+
+    }
+
+    .note-init-btns {
+
+        width: 20%;
+        height: 50px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        float: right;
+
+        button {
+
+            display: inline-block;
+
+            margin: 0 5px 0 10px;
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50px;
+            border: 1px solid salmon;
+
+        }
+
+    }
+
+    .actions {
+
+        display: none;
+
+    }
+    
+    .rte {
+
+        display: none;
+
+    }
+
+    .content {
+
+        display: none;
+
+    }
+
+    .show-folders {
+
+        display: none;
+
+    }
+
+    .create-new-note-btn {
+
+        display: none;
+
+    }
+
+
+
+
+}
+
+.notes {
+
+    position: relative;
+    bottom: 200px;
+    left: 150px;
+
+    width: calc(100% - 200px);
+
+    transition: margin 0.5s ease-in-out;
+
+    .section {
+
+        margin-bottom: 30px;
+
+        .section-title {
+
+            font-size: 30px;
+    
+        }
+
+        .note-list {
+
+            margin-top: 20px;
+        
+        }
+
+    }
+
+    .note {
+
+        position: relative;
+
+        display: inline-block;
+        
+        width: 220px;
+        height: 100px;
+
+        margin: 0 15px 15px 0;
+
+        border: 1px solid purple;
+        border-radius: 20px;
+
+        .top-actions {
+
+            position: absolute;
+            top: 10px;
+            right: 10px;
+
+            opacity: 0;
+
+            transition: opacity 0.4s ease-in-out;
+
+            div {
+
+                display: inline-block;
+
+                width: 35px;
+                height: 35px;
+
+                margin-left: 5px;
+
+                cursor: pointer;
+
+                border: 1px solid pink;
+                border-radius: 50px;
+
+            }
+
+            
+        }
+
+        .bottom-actions {
+
+            position: absolute;
+            bottom: 5px;
+            left: 7px;
+
+            width: 100%;
+
+            display: flex;
+            justify-content: center;
+
+            opacity: 0;
+
+            transition: opacity 0.4s ease-in-out;
+
+            div {
+
+                display: inline-block;
+
+                width: 30px;
+                height: 30px;
+
+                margin-right: 10px;
+
+                cursor: pointer;
+
+                border: 1px solid pink;
+                border-radius: 50px;
+
+            }
+
+        }
+
+        span {
+
+            position: absolute;
+
+        }
+
+        .title {
+
+            
+
+        }
+
+    }
+    
+}
+
+.notes.sidebar {
+
+    width: calc(100% - 500px);
+
+}
+
+
+.folder-list {
+
+    position: absolute;
+
+    top: 200px;
+    right: 200px;
+
+}

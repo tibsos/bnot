@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required as lr
 
+from django.db.models import Q
 from .models import *
 
 @lr
@@ -25,6 +26,7 @@ def home(request):
 
 
 # htmx
+
 @lr
 def create_note(request):
 
@@ -108,6 +110,39 @@ def create_folder(request):
 
     return render(request, 'components/folders.html', {'folders': Folder.objects.filter(user = request.user)})
 
+@lr
+def folder_notes(request, uid):
+
+    folder = Folder.objects.get(uid = uid)
+
+    notes = Note.objects.filter(folders__in = [folder])
+
+    c = {}
+
+    c['notes'] = notes
+
+    return render(request, 'components/notes.html', c)
+
+@lr
+def get_note(request, uid):
+    return render(request, 'components/note.html', {'note': Note.objects.get(uid = uid)})
+
+@lr
+def search_notes(request):
+
+    q = request.POST.get('q')
+
+    if q == '':
+
+        notes = None
+
+    else:
+
+        notes1 = list(Note.objects.filter(title__contains = q))
+        notes2 = list(Note.objects.filter(content__contains = q))
+        notes = set(notes1 + notes2)
+
+    return render(request, 'components/found-notes.html', {'r': notes})
 
 @lr
 def add_image_to_new_note(request):
@@ -137,3 +172,26 @@ def add_image_to_new_note(request):
     note.images.add(image)
 
     return render(request, 'components/new-note-images.html', {'note': note})
+
+@lr
+def archive_note(request, uid):
+
+    note = Note.objects.get(uid = uid)
+    note.archived = not note.archived
+    note.save()
+
+    # return notes
+
+    c = {}
+
+    return render(request, 'components/notes.html', c)
+
+
+def delete_notes(notes):
+
+    for note in notes:
+
+        pass
+
+        # if difference between now & deleted at > 30 days
+            # delete note from db 

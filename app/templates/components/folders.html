@@ -1,6 +1,6 @@
 {% for folder in folders %}
 
-    <div class="page">
+    <div class="page" hx-get="{% url 'app:folder-notes' folder.uid %}" hx-target=".notes">
 
         <span>{{ folder.title }}</span>
 

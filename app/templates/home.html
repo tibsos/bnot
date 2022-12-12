@@ -8,6 +8,12 @@
     <head>
 
 
+        {% compress css %}
+
+            <link rel="stylesheet" href="{% static 'scss/app/app.scss' %}" type="text/x-scss">
+
+        {% endcompress %}
+
         <script src="{% static 'packages/jquery-3.6.1.min.js' %}"></script>
         <script src="{% static 'packages/htmx.min.js' %}"></script>
 
@@ -15,97 +21,164 @@
 
     <body>
 
-        <div class="sidebar">
+        <div class="top-nav">
 
-            <div class="folders">
+            <div class="open-sidenav">
 
-                {% include 'components/folders.html' %}
+                <div id="toggle-sidenav">
+
+                    -
+
+                </div>
 
             </div>
 
-            <div class="page" id="create-folder">
+            <div class="brand">
 
-                <span>+</span>
+
+            </div>
+
+            <div class="search">
+
+                <form>
+
+                    <input type="text" 
+                        name="q" 
+                        id="search"
+                        hx-post="{% url 'app:search-notes' %}"
+                        hx-target=".found-notes"
+                        hx-trigger="keyup changed delay:0.25s, click" />
+
+                </form>
+
+                <div id="clear-search">
+
+                    X
+
+                </div>
+
+
+            </div>
+
+            <div class="buttons">
+
+
+                <div class="mode">
+
+                    D
+
+                </div>
+
+                <div class="profile">
+
+                    P
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sidenav">
+
+            {% include 'components/folders.html' %}
+
+            <div class="page" id="create-folder">
 
                 <span>Создать блокнот</span>
 
             </div>
 
         </div>
-        
-        <div class="new-note">
 
-            <form>
+        <div class="new-note-wrapper">
 
-                <div class="actions">
+            <div class="new-note">
 
-                    <div id="pin">
-
-                        P
-
+                <form>
+    
+                    <div class="actions">
+    
+                        <div id="pin">
+    
+                            P
+    
+                        </div>
+    
+                        <div id="love">
+    
+                            L
+    
+                        </div>
+    
                     </div>
-
-                    <div id="love">
-
-                        L
-
+    
+                    <input type="text" name="folders" id="new-note-folders" hidden />
+    
+                    <div class="title-wrapper">
+    
+                        <input type="text" name="title" class="new-note-title" placeholder="Я помню чудное мгновение...">
+    
                     </div>
-
-                </div>
-
-                <input type="text" name="folders" id="new-note-folders" hidden />
-
-                <input type="text" name="title" class="new-note-title" placeholder="Я помню чудное мгновение...">
-                
-                <div class="new-note-images">
-
-                    {% include 'components/new-note-images.html' %}
-
-                </div>
-
-                
-
-                <div class="rte">
-
-                    <button type="button" id="bold"><b>Ж</b></button>
-                    <button type="button" id="italic"><i>К</i></button>
-                    <button type="button" id="underline"><u>С</u></button>
-                    <button type="button" id="strike"><s>О</s></button>
+    
+                    <div class="note-init-btns">
+    
+                        <button>C</button>
+                        <button>I</button>
+    
+                    </div>
+    
+                    <div class="new-note-images">
+    
+                        {% include 'components/new-note-images.html' %}
+    
+                    </div>
+    
+                    <div class="rte">
+    
+                        <button type="button" id="bold"><b>Ж</b></button>
+                        <button type="button" id="italic"><i>К</i></button>
+                        <button type="button" id="underline"><u>С</u></button>
+                        <button type="button" id="strike"><s>О</s></button>
+                        
+                        <button type="button" id="ul">UL</button>
+                        <button type="button" id="ol">OL</button>
+                        <button type="button" id="cl">CL</button>
+                        
+                        <button type="button" id="image">I</button>
+                        <button type="button" id="background">C</button>
+    
+                        <button type="button" id="erase">E</button>
+    
+                    </div>
                     
-                    <button type="button" id="ul">UL</button>
-                    <button type="button" id="ol">OL</button>
-                    <button type="button" id="cl">CL</button>
+                    <div class="content">
+    
+                        <input type="text" name="content" id="new-note-content" hidden />
+                        <div contenteditable="true" class="new-note-content"></div>
+    
+                    </div>
                     
-                    <button type="button" id="image">I</button>
-                    <button type="button" id="background">C</button>
-
-                    <button type="button" id="erase">E</button>
-
-                </div>
-                
-                <div class="content">
-
-                    <input type="text" name="content" id="new-note-content" hidden />
-                    <div contenteditable="true" class="new-note-content"></div>
-
-                </div>
-                
-                <input type="checkbox" name="pinned" id="pin-cb" hidden />
-                <input type="checkbox" name="loved" id="love-cb" hidden />
-
-                <div class="show-folders">
-
-                    F
-
-                </div>
-
-                <input type="text" name="note-uid" id="new-note-uid" hidden />
-
-                <button type="submit" class="create-new-note-btn" hx-post="{% url 'app:create-note' %}" hx-target=".notes">Создать</button>
-
-            </form>
+                    <input type="checkbox" name="pinned" id="pin-cb" hidden />
+                    <input type="checkbox" name="loved" id="love-cb" hidden />
+    
+                    <div class="show-folders">
+    
+                        F
+    
+                    </div>
+    
+                    <input type="text" name="note-uid" id="new-note-uid" hidden />
+    
+                    <button type="submit" class="create-new-note-btn" hx-post="{% url 'app:create-note' %}" hx-target=".notes">Создать</button>
+    
+                </form>
+    
+            </div>
 
         </div>
+        
+        
 
         <form hx-encoding="multipart/form-data"
             hx-post="{% url 'app:add-image-to-new-note' %}"
@@ -122,6 +195,18 @@
         <div class="notes">
 
             {% include 'components/notes.html' %}
+
+        </div>
+
+        <div class="found-notes">
+
+            {% include 'components/found-notes.html' %}
+
+        </div>
+
+        <div class="current-note">
+
+            {% include 'components/note.html' %}
 
         </div>
 
@@ -143,19 +228,142 @@
 
     </body>
 
+    <style>
+
+        @font-face {
+            font-family: Comfortaa;
+            src: url("{% static 'fonts/Comfortaa.ttf' %}");
+        }
+
+        body, input, button {
+
+            font-family: Comfortaa;
+
+        }
+
+    </style>
+
     <script>
+
+        /* Note */
+
+        $('.note').mouseover(function() {
+
+            $(this).children('.top-actions').css('opacity', 1);
+            $(this).children('.bottom-actions').css('opacity', 1);
+
+        });
+
+        $('.note').mouseleave(function() {
+
+            $(this).children('.top-actions').css('opacity', 0);
+            $(this).children('.bottom-actions').css('opacity', 0);
+
+        });
+
+        /* Search */
+
+        $('#search').focus(function() {
+
+            $('.new-note').hide();
+            $('.notes').hide();
+
+        });
+
+        $('#clear-search').click(function() {
+
+            q = $('#search').val();
+
+            if (q === '') {
+
+                $('.new-note').show();
+                $('.notes').show();
+
+            } else {
+
+                $('#search').val('');
+                $('#search').focus();
+
+            }
+
+        });
+
+
+        /* Sidenav */
+
+        $('#toggle-sidenav').click(function() {
+
+            toggleSidenav();
+
+        })
+
+        var sideNavOpen = false;
+
+        var expandedWidth = '300px';
+
+        function toggleSidenav() {
+
+            if (sideNavOpen) {
+
+                $('.sidenav').css({
+
+                    'width': '45px',
+
+                });
+
+                $('.page').css({
+
+                    'width': '45px',
+
+                });
+
+                $('.new-note').css('margin-left', 0);
+
+                $('.notes').css('margin-left', 0);
+
+                $('.notes').removeClass('sidebar');
+
+                sideNavOpen = false;
+
+            } else {
+
+                $('.sidenav').css({
+
+                    'width': expandedWidth,
+
+                });
+
+                $('.page').css({
+
+                    'width': expandedWidth,
+
+                });
+
+                $('.new-note').css('margin-left', expandedWidth);
+
+                $('.notes').css('margin-left', expandedWidth);
+
+                $('.notes').addClass('sidebar');
+
+                sideNavOpen = true;
+
+            }
+
+        }
+
+        /* Syncing inputs & contenteditables */
 
         $('.rte').click(function() {
 
             $('#new-note-content').val($('.new-note-content').html());
 
-        })
+        });
 
         $('.new-note-content').keyup(function() {
 
             $('#new-note-content').val($('.new-note-content').html());
 
-        })
+        });
 
         /* RTE */
 
@@ -207,6 +415,8 @@
 
         });
 
+        /* Checklist */
+
         let checkListHTML = `
 
             <ul>
@@ -219,7 +429,7 @@
 
             </ul>
 
-        `
+        `;
 
         $('#cl').click(function() {           
 
@@ -261,6 +471,8 @@
 
         });
 
+        /* Adding images */
+
         $('#image').click(function() {
 
             $('#new-note-image-file').click();
@@ -277,31 +489,23 @@
 
             clearNewNote();
 
-        })
+        });
 
-        document.body.addEventListener('htmx:configRequest', (event) => {
-
-            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-
-        })
+        /* New note actions */
 
         $('#pin').click(function() {
 
             $('#pin-cb').prop('checked', !$('#pin-cb').prop('checked'));
 
-        })
+        });
 
         $('#love').click(function() {
 
             $('#love-cb').prop('checked', !$('#love-cb').prop('checked'));
 
-        })
+        });
 
-        $('#create-folder').click(function() {
-
-            $('.create-folder-wrapper').show();
-
-        })
+        /* New note contents reset */
 
         $('.create-new-note-btn').click(function() {
 
@@ -325,6 +529,22 @@
             $('#love-cb').prop('checked', false);
 
         }
+
+        /* Folders */
+
+        $('#create-folder').click(function() {
+
+            $('.create-folder-wrapper').show();
+
+        });
+
+        /* Universal CSRF token */
+
+        document.body.addEventListener('htmx:configRequest', (event) => {
+
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+
+        });
 
     </script>
 

@@ -1,0 +1,20 @@
+{% if r %}
+
+    <div class="notes">
+
+        {% for note in r %}
+        
+        <div class="note">
+            
+            {{ note.title }}
+            
+        </div>
+        
+        {% endfor %}
+    
+    </div>
+    
+{% endif %}
+
+
+

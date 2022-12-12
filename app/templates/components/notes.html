@@ -1,6 +1,6 @@
 {% if pinned_notes %}
 
-    <div class="pinned-notes">
+    <div class="section">
 
         <span class="section-title">
 
@@ -8,28 +8,32 @@
 
         </span>
 
-        {% for note in pinned_notes %}
+        <div class="note-list">
 
+            {% for note in pinned_notes %}
+            
             <div class="note">
-
-                <div class="content">
-
+                
+                <div class="content" hx-get="{% url 'app:get-note' note.uid %}" hx-target=".current-note">
+                    
                     <span class="title">{{ note.title }}</span>
                     <span class="content">{{ note.content | safe }}</span>
 
                 </div>
                 
             </div>
-
-        {% endfor %}
-
+            
+            {% endfor %}
+            
+        </div>
+            
     </div>
 
 {% endif %}
 
 {% if notes %}
 
-    <div class="pinned-notes">
+    <div class="section">
 
         <span class="section-title">
 
@@ -37,21 +41,70 @@
 
         </span>
 
-        {% for note in notes %}
+        <div class="note-list">
 
-            <div class="note">
+            {% for note in notes %}
+            
+                <div class="note" onmouseover="showActions()">
 
-                <div class="content">
+                    <div class="top-actions">
 
-                    <span class="title">{{ note.title }}</span>
-                    <span class="content">{{ note.content | safe }}</span>
+                        <div id="pin">
 
+                            P
+
+                        </div>
+
+                        <div id="love">
+
+                            L
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="content">
+                        
+                        <span class="title">{{ note.title }}</span>
+                        <span class="content">{{ note.content | safe }}</span>
+                        
+                    </div>
+                        
+                    <div class="bottom-actions">
+
+                        <div id="image">
+
+                            I
+
+                        </div>
+
+                        <div class="folders">
+
+                            F
+
+                        </div>
+
+                        <div class="archive">
+
+                            A
+
+                        </div>
+
+                        <div id="delete">
+
+                            D
+
+                        </div>
+
+                    </div>
+
+                    
                 </div>
-                
-            </div>
 
-        {% endfor %}
+            {% endfor %}
 
+        </div>
+        
     </div>
 
 {% endif %}

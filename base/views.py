@@ -2,4 +2,14 @@ from django.shortcuts import render
 
 def landing(request):
 
-    return render(request, 'landing.html')
+    c = {}
+
+    if request.user.is_authenticated:
+
+        c['u'] = True
+
+    else:
+
+        c['u'] = False
+
+    return render(request, 'landing.html', c)

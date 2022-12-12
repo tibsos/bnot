@@ -1,0 +1,1 @@
+/* line 3, static/scss/app/app.scss */.sidebar{width:400px;margin:10px;border:1px solid black}/* line 12, static/scss/app/app.scss */.sidebar .page span:nth-of-type(2){display:none}/* line 28, static/scss/app/app.scss */.sidebar.open .page span:nth-of-type(2){display:block}/* line 38, static/scss/app/app.scss */.folder-list{position:absolute;top:200px}
