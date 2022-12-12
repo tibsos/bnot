@@ -75,7 +75,7 @@ def create_note(request):
     folders = request.POST.get('folders')
 
     if folders:
-ё
+
         folders = folders.split(' ')
 
         for folder in folders:
