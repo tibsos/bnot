@@ -74,13 +74,6 @@ def create_note(request):
     
     folders = request.POST.get('folders')
 
-    if folders:
-
-        folders = folders.split(' ')
-
-        for folder in folders:
-
-            note.folders.add(Folder.objects.get(uid = folder))
 
     c = {}
 
